@@ -3,61 +3,62 @@ import React, { useState } from "react";
 
 const VideoHistory = () => {
   const [currentStory, setCurrentStory] = useState(null);
+  const [isPaused, setIsPaused] = useState(false);
   const stories = [
     {
       id: 1,
       userName: "کاربر 1",
       userImg: "https://placekitten.com/40/40",
-      videoUrl: "./915505290738400v.mp4",
+      videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
       imageUrl: "https://placekitten.com/100/150",
     },
     {
       id: 2,
       userName: "کاربر 2",
       userImg: "https://placekitten.com/41/41",
-      videoUrl: "./915505290738400v.mp4",
+      videoUrl: "https://www.youtube.com/embed/5qap5aO4i9A",
       imageUrl: "https://placekitten.com/100/151",
     },
     {
       id: 3,
       userName: "کاربر 3",
       userImg: "https://placekitten.com/42/42",
-      videoUrl: "./915505290738400v.mp4",
+      videoUrl: "https://www.youtube.com/embed/jNQXAC9IVRw",
       imageUrl: "https://placekitten.com/100/152",
     },
     {
       id: 4,
       userName: "کاربر 4",
       userImg: "https://placekitten.com/43/43",
-      videoUrl: "./915505290738400v.mp4",
+      videoUrl: "https://www.youtube.com/embed/9U2289mY74o",
       imageUrl: "https://placekitten.com/100/153",
     },
     {
       id: 5,
       userName: "کاربر 5",
       userImg: "https://placekitten.com/44/44",
-      videoUrl: "./915505290738400v.mp4",
+      videoUrl: "https://www.youtube.com/embed/0I657o4wOyk",
       imageUrl: "https://placekitten.com/100/154",
     },
     {
       id: 6,
       userName: "کاربر 6",
       userImg: "https://placekitten.com/45/45",
-      videoUrl: "./915505290738400v.mp4",
+      videoUrl: "https://www.youtube.com/embed/8fE-0nI89Lw",
       imageUrl: "https://placekitten.com/100/155",
     },
     {
       id: 7,
       userName: "کاربر 7",
       userImg: "https://placekitten.com/46/46",
-      videoUrl: "./915505290738400v.mp4",
+      videoUrl: "https://www.youtube.com/embed/5o2t-o9q03I",
       imageUrl: "https://placekitten.com/100/156",
     },
     {
       id: 8,
       userName: "کاربر 8",
       userImg: "https://placekitten.com/47/47",
-      videoUrl: "./915505290738400v.mp4",
+      videoUrl: "https://www.youtube.com/embed/L_o_x19F5c4",
       imageUrl: "https://placekitten.com/100/157",
     },
   ];
@@ -67,6 +68,9 @@ const VideoHistory = () => {
   };
   const handleCloseVideo = () => {
     setCurrentStory(null);
+  };
+  const handleTogglePlay = () => {
+    setIsPaused(!isPaused);
   };
   return (
     <div className="mt-8 relative" dir="rtl">
@@ -91,7 +95,10 @@ const VideoHistory = () => {
       {currentStory && (
         <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center z-50">
           <div className="relative bg-white rounded-md shadow-lg p-4">
-            <div className="flex justify-end">
+            <div className="flex justify-between items-center pb-2">
+              <span className="font-bold">
+                {stories.find((story) => story.id === currentStory).userName}
+              </span>
               <button
                 className="text-gray-500 hover:text-gray-700 text-xl"
                 onClick={handleCloseVideo}
@@ -99,13 +106,17 @@ const VideoHistory = () => {
                 X
               </button>
             </div>
-            <video
-              src={stories.find((story) => story.id === currentStory).videoUrl}
-              controls
-              width={400}
-              height={300}
-              autoPlay
-            />
+            <iframe
+              width="400"
+              height="300"
+              src={`${
+                stories.find((story) => story.id === currentStory).videoUrl
+              }?autoplay=1&mute=0`}
+              title="YouTube video player"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen
+            ></iframe>
           </div>
         </div>
       )}

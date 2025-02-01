@@ -1,4 +1,3 @@
-// frontend/src/components/NavigationSidebar.jsx
 import React, { useContext, useState } from "react";
 import { AppContext } from "../context/AppContext";
 
@@ -43,10 +42,10 @@ const NavigationSidebar = () => {
   };
   return (
     <aside
-      dir="rtl"
       className={`bg-gray-50 w-64 p-4 shadow-md fixed top-0 right-0 h-full overflow-y-auto transform transition-transform duration-300 lg:relative ${
         isSidebarOpen ? "translate-x-0" : "-translate-x-full"
       }  lg:translate-x-0 z-10`}
+      dir="rtl"
     >
       <div className="flex justify-end lg:hidden">
         <button
