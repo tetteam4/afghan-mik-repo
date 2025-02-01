@@ -1,0 +1,5 @@
+node_modules,
+databases.drawio
+node_modules
+/.env
+.env
