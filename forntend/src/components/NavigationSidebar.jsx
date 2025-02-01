@@ -1,44 +1,50 @@
-import React, { useContext } from "react";
+// frontend/src/components/NavigationSidebar.jsx
+import React, { useContext, useState } from "react";
 import { AppContext } from "../context/AppContext";
 
 const categories = [
   {
-    name: "Mobiles",
+    name: "موبایل",
     icon: "📱",
-    subcategories: ["Apple", "Samsung", "Xiaomi", "Oppo", "Google"],
+    subcategories: ["اپل", "سامسونگ", "شیائومی", "اوپو", "گوگل"],
   },
   {
-    name: "Home & Appliances",
+    name: "خانه و لوازم خانگی",
     icon: "🏠",
-    subcategories: ["Kitchen Appliances", "Home Appliances", "Furniture"],
+    subcategories: ["لوازم آشپزخانه", "لوازم خانگی", "مبلمان"],
   },
   {
-    name: "Beauty & Health",
+    name: "آرایشی و بهداشتی",
     icon: "💄",
-    subcategories: ["Skincare", "Makeup", "Haircare", "Personal Care"],
+    subcategories: ["مراقبت از پوست", "آرایش", "مراقبت مو", "مراقبت شخصی"],
   },
   {
-    name: "Automotive & Transport",
+    name: "خودرو و حمل و نقل",
     icon: "🚗",
-    subcategories: ["Car Accessories", "Motorcycle Parts", "Bicycle Parts"],
+    subcategories: ["لوازم جانبی خودرو", "قطعات موتور سیکلت", "قطعات دوچرخه"],
   },
   {
-    name: "Digital Goods",
+    name: "کالاهای دیجیتال",
     icon: "💻",
-    subcategories: ["Software", "Games", "Digital Content"],
+    subcategories: ["نرم افزار", "بازی ها", "محتوای دیجیتال"],
   },
   {
-    name: "Fashion",
+    name: "مد و پوشاک",
     icon: "👚",
-    subcategories: ["Men's Clothing", "Women's Clothing", "Kids Fashion"],
+    subcategories: ["لباس مردانه", "لباس زنانه", "مد کودکان"],
   },
 ];
 
 const NavigationSidebar = () => {
   const { isSidebarOpen, setIsSidebarOpen } = useContext(AppContext);
+  const [openSubMenu, setOpenSubMenu] = useState(null);
+  const toggleSubMenu = (index) => {
+    setOpenSubMenu(openSubMenu === index ? null : index);
+  };
   return (
     <aside
-      className={`bg-gray-50 w-64 p-4 shadow-md fixed top-0 left-0 h-full overflow-y-auto transform transition-transform duration-300 lg:relative ${
+      dir="rtl"
+      className={`bg-gray-50 w-64 p-4 shadow-md fixed top-0 right-0 h-full overflow-y-auto transform transition-transform duration-300 lg:relative ${
         isSidebarOpen ? "translate-x-0" : "-translate-x-full"
       }  lg:translate-x-0 z-10`}
     >
@@ -51,15 +57,35 @@ const NavigationSidebar = () => {
         </button>
       </div>
       <ul className="space-y-3">
-        {categories.map((category) => (
+        {categories.map((category, index) => (
           <li key={category.name} className="hover:bg-gray-200 p-2 rounded-md">
-            <div className="flex items-center cursor-pointer">
-              <span className="mr-2">{category.icon}</span>
-              <span className="font-medium">{category.name}</span>
+            <div
+              onClick={() => toggleSubMenu(index)}
+              className="flex items-center cursor-pointer justify-between"
+            >
+              <div className="flex items-center">
+                <span className="mr-2">{category.icon}</span>
+                <span className="font-medium">{category.name}</span>
+              </div>
+              {category.subcategories && category.subcategories.length > 0 && (
+                <span
+                  className={`transform transition-transform duration-200  ${
+                    openSubMenu === index ? "rotate-90" : ""
+                  }`}
+                >
+                  ◀
+                </span>
+              )}
             </div>
             {/* Subcategories */}
             {category.subcategories && category.subcategories.length > 0 && (
-              <ul className="ml-4 mt-2 space-y-1">
+              <ul
+                className={`ml-4 mt-2 space-y-1 transition-all duration-300 overflow-hidden ${
+                  openSubMenu === index
+                    ? "max-h-96 p-2 border-r border-gray-300"
+                    : "max-h-0"
+                }`}
+              >
                 {category.subcategories.map((subcategory) => (
                   <li
                     key={subcategory}

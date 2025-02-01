@@ -1,17 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400..700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&display=swap');
-
+/* frontend/src/index.css */
+@import url('https://fonts.googleapis.com/css2?family=Vazir:wght@400;700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 body{
-    height:100vh,
-
-}
-.ql-editor{
-    font-size:18px;
-    direction:rtl;
-    text-align:right; 
-    
+   font-family: 'Vazir', sans-serif;
 }

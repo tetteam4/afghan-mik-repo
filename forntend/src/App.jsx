@@ -8,73 +8,40 @@ import VideoPlayer from "./components/VideoPlayer";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ProductDetails from "./pages/ProductDetails";
 import { AppProvider } from "./context/AppContext";
+import SearchPage from "./pages/SearchPage";
+import Footer from "./components/Footer";
+import VideoHistory from "./components/VideoHistory";
 
-const products = [
-  {
-    id: 1,
-    name: "Product 1",
-    price: "1000 AFN",
-    image: "https://placekitten.com/200/300",
-  },
-  {
-    id: 2,
-    name: "Product 2",
-    price: "2000 AFN",
-    image: "https://placekitten.com/200/301",
-  },
-  {
-    id: 3,
-    name: "Product 3",
-    price: "3000 AFN",
-    image: "https://placekitten.com/200/302",
-  },
-  {
-    id: 4,
-    name: "Product 4",
-    price: "4000 AFN",
-    image: "https://placekitten.com/200/303",
-  },
-  {
-    id: 5,
-    name: "Product 5",
-    price: "5000 AFN",
-    image: "https://placekitten.com/200/304",
-  },
-  {
-    id: 6,
-    name: "Product 6",
-    price: "6000 AFN",
-    image: "https://placekitten.com/200/305",
-  },
-];
 function App() {
   return (
     <AppProvider>
       <BrowserRouter>
-        <div className="bg-gray-100 min-h-screen font-sans">
+        <div className="bg-gray-100 min-h-screen font-sans flex flex-col">
           <Header />
-          <div className="container mx-auto px-4 flex mt-4">
+          <div className="container mx-auto px-4 flex mt-4 flex-1">
             <NavigationSidebar />
             <main className="flex-1 ml-4">
+              <VideoHistory />
               <Routes>
                 <Route
                   path="/"
                   element={
                     <>
                       <HeroSection />
-                      <CategoryCard
-                        title="Suggested products"
-                        products={products}
-                      />
-                      <CategoryCard title="Most viewed" products={products} />
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <CategoryCard title="محصولات پیشنهادی" />
+                        <CategoryCard title="پربازدید ترین ها" />
+                      </div>
                       <VideoPlayer />
                     </>
                   }
                 />
                 <Route path="/product/:id" element={<ProductDetails />} />
+                <Route path="/search/:searchTerm" element={<SearchPage />} />
               </Routes>
             </main>
           </div>
+          <Footer />
         </div>
       </BrowserRouter>
     </AppProvider>
