@@ -1,5 +1,6 @@
 // frontend/src/components/PasswordStrengthMeter.jsx
 import { Check, X } from "lucide-react";
+import { motion } from "framer-motion";
 
 const PasswordCriteria = ({ password }) => {
   const criteria = [
@@ -12,8 +13,14 @@ const PasswordCriteria = ({ password }) => {
 
   return (
     <div className="mt-2 space-y-1" dir="rtl">
-      {criteria.map((item) => (
-        <div key={item.label} className="flex items-center text-xs">
+      {criteria.map((item, index) => (
+        <motion.div
+          key={item.label}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: index * 0.1 }}
+          className="flex items-center text-xs"
+        >
           {item.met ? (
             <Check className="size-4 text-green-500 mr-2" />
           ) : (
@@ -22,7 +29,7 @@ const PasswordCriteria = ({ password }) => {
           <span className={item.met ? "text-green-500" : "text-gray-400"}>
             {item.label}
           </span>
-        </div>
+        </motion.div>
       ))}
     </div>
   );
@@ -37,13 +44,15 @@ const PasswordStrengthMeter = ({ password }) => {
     if (pass.match(/[^a-zA-Z\d]/)) strength++;
     return strength;
   };
+
   const strength = getStrength(password);
+
   const getColor = (strength) => {
-    if (strength === 0) return "bg-red-500";
-    if (strength === 1) return "bg-red-400";
-    if (strength === 2) return "bg-yellow-500";
-    if (strength === 3) return "bg-yellow-400";
-    return "bg-green-500";
+    if (strength === 0) return "from-red-500 to-red-400";
+    if (strength === 1) return "from-red-400 to-orange-400";
+    if (strength === 2) return "from-yellow-500 to-yellow-400";
+    if (strength === 3) return "from-green-400 to-green-500";
+    return "from-green-500 to-green-600";
   };
 
   const getStrengthText = (strength) => {
@@ -56,29 +65,48 @@ const PasswordStrengthMeter = ({ password }) => {
 
   return (
     <div className="mt-2" dir="rtl">
+      {/* Strength Text and Label */}
       <div className="flex justify-between items-center mb-1">
         <span className="text-xs text-gray-400">قدرت رمز عبور</span>
-        <span className="text-xs text-gray-400">
+        <motion.span
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+          
+          className="text-xs font-semibold"
+          style={{
+            background: `linear-gradient(to right, ${getColor(strength)})`,
+            WebkitBackgroundClip: "text",
+            color: "transparent",
+          }}
+        >
           {getStrengthText(strength)}
-        </span>
+        </motion.span>
       </div>
 
+      {/* Strength Bar */}
       <div className="flex space-x-1">
         {[...Array(4)].map((_, index) => (
-          <div
+          <motion.div
             key={index}
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ duration: 0.3, delay: index * 0.1 }}
             className={`h-1 w-1/4 rounded-full transition-colors duration-300 
                               ${
                                 index < strength
-                                  ? getColor(strength)
+                                  ? `bg-gradient-to-r ${getColor(strength)}`
                                   : "bg-gray-600"
                               }
                           `}
           />
         ))}
       </div>
+
+      {/* Password Criteria */}
       <PasswordCriteria password={password} />
     </div>
   );
 };
+
 export default PasswordStrengthMeter;

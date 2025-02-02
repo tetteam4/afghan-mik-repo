@@ -3,7 +3,7 @@ import React, { useState, useContext, useRef, useEffect } from "react";
 import { AppContext } from "../../context/AppContext";
 import CitySelector from "../CitySelector";
 import SearchPopup from "../SearchPopup";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 const Header = () => {
   const {
     isSearchOpen,
