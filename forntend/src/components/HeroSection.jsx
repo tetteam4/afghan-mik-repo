@@ -63,9 +63,9 @@ const HeroSection = () => {
   }, []);
 
   return (
-    <div className="relative overflow-hidden rounded-md shadow-md">
+    <div className="relative overflow-hidden rounded-md shadow-md ">
       {/* Slider content */}
-      <div ref={sliderRef} className="relative w-full h-96">
+      <div ref={sliderRef} className=" relative w-full h-96">
         {slides.map((slide, index) => (
           <div
             key={slide.id}
