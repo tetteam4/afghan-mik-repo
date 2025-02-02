@@ -25,4 +25,39 @@ export const getProductById = async (id) => {
     throw error;
   }
 };
+
+export const signupUser = async (userData) => {
+  try {
+    const response = await api.post("/users/signup", userData);
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Signup failed:",
+      error.response ? error.response.data : error.message
+    );
+    throw error;
+  }
+};
+
+export const signinUser = async (userData) => {
+  try {
+    const response = await api.post("/users/signin", userData);
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Signin failed:",
+      error.response ? error.response.data : error.message
+    );
+    throw error;
+  }
+};
+export const logoutUser = async () => {
+  try {
+    const response = await api.post("/users/logout");
+    return response.data;
+  } catch (error) {
+    console.error("Logout failed:", error);
+    throw error;
+  }
+};
 export default api;

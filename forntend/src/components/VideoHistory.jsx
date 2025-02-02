@@ -8,8 +8,8 @@ const VideoHistory = () => {
     {
       id: 1,
       userName: "کاربر 1",
-      userImg: "https://placekitten.com/40/40",
-      videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+      userImg: "/on/75 x 55-02.png",
+      videoUrl: "/on/915505290738400v.mp4",
       imageUrl: "https://placekitten.com/100/150",
     },
     {

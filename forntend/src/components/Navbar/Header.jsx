@@ -1,101 +1,183 @@
-import React, { useState } from "react";
-import { IoSearch } from "react-icons/io5";
-import { TfiShoppingCart } from "react-icons/tfi";
-import { GoSignIn } from "react-icons/go";
-import { TbLogin } from "react-icons/tb";
-import { Link } from "react-router-dom";
+// frontend/src/components/Navbar/Header.jsx
+import React, { useState, useContext, useRef, useEffect } from "react";
+import { AppContext } from "../../context/AppContext";
 import CitySelector from "../CitySelector";
-
+import SearchPopup from "../SearchPopup";
+import { useNavigate } from "react-router-dom";
 const Header = () => {
-  const [isClick, setIsClick] = useState(false);
-  const [cardItems, setCardItems] = useState(0);
- const [isCitySelectorOpen, setIsCitySelectorOpen] = useState(false);
+  const {
+    isSearchOpen,
+    setIsSearchOpen,
+    isSidebarOpen,
+    setIsSidebarOpen,
+    setUser,
+  } = useContext(AppContext);
+  const [isCitySelectorOpen, setIsCitySelectorOpen] = useState(false);
+  const [showProfileOptions, setShowProfileOptions] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const navigate = useNavigate();
+  const handleSearchClick = () => {
+    setIsSearchOpen(true);
+  };
+  const handleToggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+  const handleCitySelector = () => {
+    setIsCitySelectorOpen(!isCitySelectorOpen);
+  };
+  const handleCloseCitySelector = () => {
+    setIsCitySelectorOpen(false);
+  };
+  const toggleProfileOptions = () => {
+    setShowProfileOptions(!showProfileOptions);
+  };
+  const handleSearch = (event) => {
+    const searchTerm = event.target.value;
+    setSearchTerm(searchTerm);
+    if (event.key === "Enter" && searchTerm.trim() !== "") {
+      navigate(`/search/${searchTerm}`);
+      setSearchResults([]);
+    }
+  };
+  const searchRef = useRef(null);
 
+  const suggestions = [
+    "ساعت هوشمند",
+    "گوشی موبایل",
+    "لپ تاپ",
+    "هدفون",
+    "کیف",
+    "کتاب",
+    "لوازم منزل",
+  ];
+  useEffect(() => {
+    if (searchRef.current) {
+      const filtered = suggestions.filter((item) =>
+        item.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setSearchResults(filtered);
+    }
+  }, [searchTerm]);
 
-    const handleCitySelector = () => {
-      setIsCitySelectorOpen(!isCitySelectorOpen);
-    };
-    const handleCloseCitySelector = () => {
-      setIsCitySelectorOpen(false);
-    };
+  const handleLogout = () => {
+    setUser(null);
+    navigate("/");
+  };
   return (
-    <header className="bg-white fixed z-40 p-6 top-0 left-0 right-0">
-      <div className="container mx-auto grid grid-cols-2">
+    <header className="bg-white shadow-md z-30 fixed top-0 left-0 right-0">
+      <div
+        className="container mx-auto px-4 py-2 flex items-center justify-between relative"
+        dir="rtl"
+      >
+        {/* Category Toggle */}
+        <button
+          onClick={handleToggleSidebar}
+          className="text-gray-700 focus:outline-none lg:hidden"
+        >
+          ☰
+        </button>
         {/* Logo */}
-        <div className="flex items-center gap-x-4  justify-between">
-          <div className="text-2xl font-bold text-red-500 font-serif">
-            <a href="/" className="text-gray-800">بازار</a> افغان
-          </div>
-          {/* Search Bar */}
-          <div className="flex-1 mx-4 relative">
-            <input
-              type="text"
-              onClick={() => setIsClick(!isClick)}
-              placeholder="جستجو ..."
-              className="w-full py-2 border px-10 border-gray-300 bg-gray-200 rounded-lg focus:outline-none "
-            />
-            <span
-              className={`absolute top-3 text-xl  text-gray-500 right-4  ${
-                isClick ? "hidden" : ""
-              }`}
-            >
-              <IoSearch />
-            </span>
-            {isClick && (
-              <div className="absolute top-12 right-0 w-full h-[300px] bg-gray-100 border border-gray-600 rounded-lg"></div>
-            )}
-          </div>
+        <div className="text-2xl font-bold text-red-500 font-serif">
+          <span className="text-gray-800">بازار</span> افغان
         </div>
-
-        <div className="flex items-center justify-end gap-x-5">
-          <div className="flex items-center bg-gray-50 hover:bg-gray-100 rounded-lg border p-2 ">
-            <span>
-              <TbLogin className="text-gray-700" size={24} />
-            </span>
-            <Link
-              to="/signup
-            "
-              className="px-2  text-sm font-semibold "
+        {/* search bar */}
+        <div className="relative flex-grow mx-4 hidden lg:block">
+          <input
+            type="text"
+            placeholder="جستجو در محصولات"
+            className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:border-blue-500"
+            onKeyDown={handleSearch}
+            ref={searchRef}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          {searchTerm && searchResults.length > 0 && (
+            <ul className="absolute top-12 right-0 w-full bg-white border border-gray-300 rounded-md shadow-lg z-10">
+              {searchResults.map((result, index) => (
+                <li
+                  key={index}
+                  className="p-2 px-3 hover:bg-gray-100 cursor-pointer"
+                  onClick={() => {
+                    navigate(`/search/${result}`);
+                    setSearchTerm("");
+                    setSearchResults([]);
+                  }}
+                >
+                  {result}
+                </li>
+              ))}
+            </ul>
+          )}
+          <button
+            onClick={handleSearchClick}
+            className="absolute top-0 left-0 h-full w-10 flex justify-center items-center text-gray-500 hover:text-gray-700"
+          >
+            🔍
+          </button>
+        </div>
+        {/* Actions */}
+        <div className="flex items-center gap-4">
+          {/* city select */}
+          <div className="relative">
+            <div
+              onClick={handleCitySelector}
+              className="cursor-pointer text-gray-800 hover:text-gray-600"
             >
-              ورود
-            </Link>
-            <Link
-              to="/signin"
-              className="px-2 border-r-2 border-black text-sm font-semibold "
-            >
-              ثبت نام
-            </Link>
-            {/* city select */}
-            <div className="relative">
-              <div
-                onClick={handleCitySelector}
-                className="cursor-pointer text-gray-800 hover:text-gray-600"
-              >
-                انتخاب شهر
-              </div>
-              {isCitySelectorOpen && (
-                <CitySelector onClose={handleCloseCitySelector} />
-              )}
+              انتخاب شهر
             </div>
-          </div>
-
-          <div className="relative ml-4">
-            <Link
-              to="/card"
-              className="text-gray-600 hover:text-blue-500 focus:outline-none"
-            >
-              <TfiShoppingCart size={30} />
-            </Link>
-            {cardItems > 0 && (
-              <span className="absolute -top-2 -right-2 px-1.5 flex items-center justify-center py-0.5 text-xs text-white bg-red-500 rounded-full">
-                3
-              </span>
+            {isCitySelectorOpen && (
+              <CitySelector onClose={handleCloseCitySelector} />
             )}
           </div>
+          {/* login / profile */}
+          <div className="relative">
+            <div
+              onClick={toggleProfileOptions}
+              className="cursor-pointer text-gray-800 hover:text-gray-600"
+            >
+              پروفایل
+            </div>
+            {showProfileOptions && (
+              <div className="absolute bg-white border border-gray-300 rounded-md shadow-md p-2 top-8 right-0 w-48 z-20">
+                <ul className="space-y-1">
+                  <li className="hover:bg-gray-100 py-1 px-2 rounded-md cursor-pointer">
+                    <Link to="/signin"> ورود </Link>
+                  </li>
+                  <li className="hover:bg-gray-100 py-1 px-2 rounded-md cursor-pointer">
+                    پروفایل من
+                  </li>
+                  <li
+                    className="hover:bg-gray-100 py-1 px-2 rounded-md cursor-pointer"
+                    onClick={handleLogout}
+                  >
+                    خروج
+                  </li>
+                </ul>
+              </div>
+            )}
+          </div>
+          {/* cart */}
+          <div className="relative">
+            <div className="cursor-pointer text-gray-800 hover:text-gray-600">
+              🛒
+            </div>
+            <span className="absolute top-0 right-0 transform translate-x-2 -translate-y-1 bg-red-500 text-white text-xs rounded-full px-1">
+              3
+            </span>
+          </div>
         </div>
+        {/* Mobile Search Bar */}
+        <div className="relative flex-grow mx-4 lg:hidden">
+          <button
+            onClick={handleSearchClick}
+            className="flex justify-center items-center text-gray-500 hover:text-gray-700"
+          >
+            🔍
+          </button>
+        </div>
+        {isSearchOpen && <SearchPopup />}
       </div>
     </header>
   );
 };
-
 export default Header;

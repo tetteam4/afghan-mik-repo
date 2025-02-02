@@ -1,3 +1,4 @@
+// frontend/src/components/Navbar/Navbar.jsx
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { MdMenu, MdClose } from "react-icons/md";
@@ -11,14 +12,11 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [showCategory, setShowCategory] = useState(false);
-
   const [activeMenu, setActiveMenu] = useState(null); // Tracks the active mega menu
-
   // Toggle mobile menu
   const toggleMenu = () => {
     setMenuOpen((prev) => !prev);
   };
-
   // Detect scroll to toggle navbar position
   useEffect(() => {
     const handleScroll = () => {
@@ -31,7 +29,6 @@ const Navbar = () => {
     };
   }, []);
 
-  
   useEffect(() => {
     let timeout;
     if (isHovered) {
@@ -43,7 +40,6 @@ const Navbar = () => {
     return () => clearTimeout(timeout); // Cleanup timeout
   }, [isHovered]);
 
- 
   const navItems = [
     { to: "/men", label: "مد فشن مردانه", icon: <FaMale /> },
     { to: "/women", label: "مد فشن زنانه", icon: <FaFemale /> },
@@ -56,9 +52,9 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`w-full z-30 transition-all    border-b-2 duration-500 ${
+      className={`w-full z-30 transition-all  duration-500 ${
         isScrolled
-          ? "sticky top-20 bg-white  border-b-2 border-gray-800 shadow-md"
+          ? "sticky top-20 bg-white shadow-md"
           : "fixed top-20 bg-transparent"
       }`}
     >
@@ -76,7 +72,6 @@ const Navbar = () => {
             menuOpen ? "translate-x-0" : "-translate-x-full"
           } transition-transform duration-300 lg:items-center`}
         >
-        
           <div
             className="relative"
             onMouseEnter={() => setIsHovered(true)}

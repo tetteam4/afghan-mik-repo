@@ -1,3 +1,4 @@
+// frontend/src/components/Category/Category.jsx
 import React, { useState, useEffect } from "react";
 import MainCategory from "./MainCategory";
 import SubCategories from "./SubCategories";
@@ -6,7 +7,28 @@ const Category = () => {
   const categories = [
     {
       name: "مد و پوشاک مردانه",
-      subcategories: ["پیراهن", "شلوار", "کفش", "لوازم جانبی","پیراهن", "شلوار", "کفش", "لوازم جانبی","پیراهن", "شلوار", "کفش", "لوازم جانبی","پیراهن", "شلوار", "کفش", "لوازم جانبی","پیراهن", "شلوار", "کفش", "لوازم جانبی"],
+      subcategories: [
+        "پیراهن",
+        "شلوار",
+        "کفش",
+        "لوازم جانبی",
+        "پیراهن",
+        "شلوار",
+        "کفش",
+        "لوازم جانبی",
+        "پیراهن",
+        "شلوار",
+        "کفش",
+        "لوازم جانبی",
+        "پیراهن",
+        "شلوار",
+        "کفش",
+        "لوازم جانبی",
+        "پیراهن",
+        "شلوار",
+        "کفش",
+        "لوازم جانبی",
+      ],
     },
     {
       name: "مد و پوشاک زنانه",
@@ -43,7 +65,12 @@ const Category = () => {
     },
     {
       name: "ورزش و تناسب اندام",
-      subcategories: ["لباس ورزشی", "کفش ورزشی", "دستگاه‌های ورزشی", "دستکش ورزشی"],
+      subcategories: [
+        "لباس ورزشی",
+        "کفش ورزشی",
+        "دستگاه‌های ورزشی",
+        "دستکش ورزشی",
+      ],
     },
     {
       name: "عطر و لوازم آرایشی",
@@ -88,11 +115,14 @@ const Category = () => {
     },
     {
       name: "ورزش و تناسب اندام",
-      subcategories: ["لباس ورزشی", "کفش ورزشی", "دستگاه‌های ورزشی", "دستکش ورزشی"],
+      subcategories: [
+        "لباس ورزشی",
+        "کفش ورزشی",
+        "دستگاه‌های ورزشی",
+        "دستکش ورزشی",
+      ],
     },
   ];
-
-
 
   const [hoveredCategory, setHoveredCategory] = useState(null);
   const [isHovered, setIsHovered] = useState(false);

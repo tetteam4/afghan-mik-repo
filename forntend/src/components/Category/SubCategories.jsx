@@ -1,3 +1,4 @@
+// frontend/src/components/Category/SubCategories.jsx
 import React from "react";
 
 const SubCategories = ({ hoveredCategory }) => {

@@ -1,3 +1,4 @@
+// frontend/src/components/Category/MainCategory.jsx
 import React from "react";
 import { IoIosArrowBack } from "react-icons/io";
 

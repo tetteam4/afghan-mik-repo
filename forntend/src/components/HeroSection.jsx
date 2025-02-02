@@ -5,48 +5,42 @@ const HeroSection = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const sliderRef = useRef(null);
 
-   const slides = [
-     {
-       id: 1,
-       image:
-         "./public/on/3bc36b2d17fdd8f6a2e13fee6341944969e0d117_1737790689.webp",
-       title: "Slider One",
-       description: "Some description for slide 1",
-     },
-     {
-       id: 2,
-       image:
-         "./public/on/071aae4cfac33369f522205f03f4801fae2e2c84_1737898557.gif",
-       title: "Slider One",
-       title: "Slider Two",
-       description: "Some description for slide 2",
-     },
-     {
-       id: 3,
-       image:
-         "./public/on/77b9f821314e777bc92418adc2bb0d8dd6db2400_1737882290.gif",
-       title: "Slider One",
-       title: "Slider Three",
-       description: "Some description for slide 3",
-     },
-     {
-       id: 4,
-       image:
-         "./public/on/c37f3ab10439601a13e20acd9307eefd907ce253_1737966015.gif",
-       title: "Slider One",
-       title: "Slider Three",
-       description: "Some description for slide 3",
-     },
-     {
-       id: 5,
-       image:
-         "./public/on/cec5045371bda5c77bfa49f84ab22c65aca1054d_1737373650.webp",
-       title: "Slider One",
-       title: "Slider Three",
-       description: "Some description for slide 3",
-     },
-   ];
-
+  const slides = [
+    {
+      id: 1,
+      image: "/on/3bc36b2d17fdd8f6a2e13fee6341944969e0d117_1737790689.webp",
+      title: "Slider One",
+      description: "Some description for slide 1",
+    },
+    {
+      id: 2,
+      image: "/on/071aae4cfac33369f522205f03f4801fae2e2c84_1737898557.gif",
+      title: "Slider One",
+      title: "Slider Two",
+      description: "Some description for slide 2",
+    },
+    {
+      id: 3,
+      image: "/on/77b9f821314e777bc92418adc2bb0d8dd6db2400_1737882290.gif",
+      title: "Slider One",
+      title: "Slider Three",
+      description: "Some description for slide 3",
+    },
+    {
+      id: 4,
+      image: "/on/c37f3ab10439601a13e20acd9307eefd907ce253_1737966015.gif",
+      title: "Slider One",
+      title: "Slider Three",
+      description: "Some description for slide 3",
+    },
+    {
+      id: 5,
+      image: "/on/cec5045371bda5c77bfa49f84ab22c65aca1054d_1737373650.webp",
+      title: "Slider One",
+      title: "Slider Three",
+      description: "Some description for slide 3",
+    },
+  ];
 
   const nextSlide = () => {
     setCurrentSlide((prevSlide) => (prevSlide + 1) % slides.length);
