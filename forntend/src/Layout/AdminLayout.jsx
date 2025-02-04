@@ -1,15 +1,18 @@
-// frontend/src/Layout/AdminLayout.jsx
-import React, { useContext } from "react";
-import { Navigate, Outlet } from "react-router-dom";
-import { AppContext } from "../context/AppContext";
+   // frontend/src/Layout/AdminLayout.jsx
+ import React from "react";
+  import { Outlet, Link } from "react-router-dom";
+ import AdminNavbar from "../components/Admin/AdminNavbar";
 
-const AdminLayout = () => {
-  const { user } = useContext(AppContext);
-  if (!user || user.role !== "admin") {
-    return <Navigate to="/" />;
-  }
+   const AdminLayout = () => {
+     return (
+        
 
-  return <Outlet />;
-};
+          <div>
+             <AdminNavbar/>
+               
+           </div>
+     
+     );
+ };
 
-export default AdminLayout;
+     export default AdminLayout;
