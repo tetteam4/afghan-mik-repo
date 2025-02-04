@@ -8,6 +8,8 @@ import SignUp from "./pages/Signup";
 // import EmailVerificationPage from "./pages/EmailVerificationPage";
 // import ResetPasswordPage from "./pages/ResetPasswordPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import UserLayout from "./Layout/UserLayout";
+import UserDashboard from "./pages/UserDashboard";
 
 const App = () => {
   return (
@@ -16,6 +18,10 @@ const App = () => {
         <Route path="/" element={<Layout />}>
           <Route path="/" element={<Home />} />
         </Route>
+        <Route path="/" element={<UserLayout/>}>
+          <Route path="/user-dash" element={<UserDashboard/>} />
+        </Route>
+
         <Route path="/signin" element={<Signin />} />
         <Route path="/signup" element={<SignUp />} />
         {/* <Route path="/emailVerification" element={<EmailVerificationPage />} />

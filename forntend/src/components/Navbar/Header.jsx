@@ -3,8 +3,10 @@ import React, { useState, useContext, useRef, useEffect } from "react";
 import { AppContext } from "../../context/AppContext";
 import CitySelector from "../CitySelector";
 import SearchPopup from "../SearchPopup";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../store/authStore";
+import ProfileDropdown from "../ProfileDropdown";
+
 const Header = () => {
   const { isSearchOpen, setIsSearchOpen, isSidebarOpen, setIsSidebarOpen } =
     useContext(AppContext);
@@ -14,6 +16,7 @@ const Header = () => {
   const [searchResults, setSearchResults] = useState([]);
   const navigate = useNavigate();
   const { logout, user } = useAuthStore();
+
   const handleSearchClick = () => {
     setIsSearchOpen(true);
   };
@@ -56,6 +59,7 @@ const Header = () => {
       setSearchResults(filtered);
     }
   }, [searchTerm]);
+
   return (
     <header className="bg-white shadow-md z-30 fixed top-0 left-0 right-0">
       <div
@@ -127,32 +131,14 @@ const Header = () => {
               onClick={toggleProfileOptions}
               className="cursor-pointer text-gray-800 hover:text-gray-600"
             >
-              پروفایل
+              {user ? user.name : "پروفایل"}
             </div>
             {showProfileOptions && (
-              <div className="absolute bg-white border border-gray-300 rounded-md shadow-md p-2 top-8 right-0 w-48 z-20">
-                <ul className="space-y-1">
-                  {user ? (
-                    <>
-                      <li className="hover:bg-gray-100 py-1 px-2 rounded-md cursor-pointer">
-                        پروفایل من
-                      </li>
-                      <li
-                        className="hover:bg-gray-100 py-1 px-2 rounded-md cursor-pointer"
-                        onClick={logout}
-                      >
-                        خروج
-                      </li>
-                    </>
-                  ) : (
-                    <>
-                      <li className="hover:bg-gray-100 py-1 px-2 rounded-md cursor-pointer">
-                        <Link to="/signin">ورود </Link>
-                      </li>
-                    </>
-                  )}
-                </ul>
-              </div>
+              <ProfileDropdown
+                user={user}
+                logout={logout}
+                onClose={toggleProfileOptions}
+              />
             )}
           </div>
           {/* cart */}

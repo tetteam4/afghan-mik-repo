@@ -1,9 +1,9 @@
-// backend/controllers/userController.js
 import User from "../models/userModel.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+
 const generateToken = (res, id) => {
-  const token = jwt.sign({ id }, "hussain", {
+  const token = jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: "1d",
   });
   res.cookie("token", token, {
@@ -76,9 +76,56 @@ const logoutUser = (req, res) => {
   });
   res.status(200).json({ message: "User logged out successfully" });
 };
+//Get All Users
+const getAllUsers = async (req, res) => {
+  try {
+    const allUsers = await User.find({});
+    res.status(200).json(allUsers);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+const editUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { username, email, role, firstName, lastName, phone, address } =
+      req.body;
+    const updatedUser = await User.findByIdAndUpdate(
+      id,
+      {
+        username,
+        email,
+        role,
+        profile: { firstName, lastName, phone, address },
+      },
+      { new: true }
+    );
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.status(200).json({ message: "User updated", data: updatedUser });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+const deleteUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findByIdAndDelete(id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.status(200).json({ message: "User deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 export default {
   signupUser,
   signinUser,
   logoutUser,
+  getAllUsers,
+  editUser,
+  deleteUser,
 };

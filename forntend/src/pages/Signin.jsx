@@ -2,11 +2,12 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Mail, Lock, Loader } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Input from "../components/Input";
 import { useAuthStore } from "../store/authStore";
 
 const LoginPage = () => {
+  const navigate=useNavigate()
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { login, isLoading, error } = useAuthStore();
@@ -14,6 +15,8 @@ const LoginPage = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     await login(email, password);
+    await navigate("/")
+    
   };
 
   return (

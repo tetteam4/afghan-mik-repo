@@ -4,10 +4,10 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import dotenv from "dotenv"
+import dotenv from "dotenv";
 // import productRoutes from "./routes/productRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
-dotenv.config()
+dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 

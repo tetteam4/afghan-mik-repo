@@ -8,6 +8,12 @@ const useAuthStore = create((set, get) => ({
   error: null,
   user: null,
   setUser: (user) => set({ user }),
+  //Session Token management
+  token: localStorage.getItem("token") || null,
+  setToken: (token) => set({ token }),
+  clearToken: () => set({ token: null }),
+
+  // Authentication Functionalities
   login: async (email, password) => {
     set({ isLoading: true, error: null });
     try {
@@ -17,10 +23,16 @@ const useAuthStore = create((set, get) => ({
         { withCredentials: true }
       );
       const { user } = response.data;
-
+      localStorage.setItem("user", JSON.stringify(user));
       set({ isLoading: false, error: null, user: user });
     } catch (err) {
-      set({ isLoading: false, error: err.response.data.message, user: null });
+      set({
+        isLoading: false,
+        error:
+          err?.response?.data?.message ||
+          "An unexpected error occurred during login.",
+        user: null,
+      });
     }
   },
   signup: async (name, email, password) => {
@@ -32,18 +44,31 @@ const useAuthStore = create((set, get) => ({
         { withCredentials: true }
       );
       const { user } = response.data;
+      localStorage.setItem("user", JSON.stringify(user));
       set({ isLoading: false, error: null, user: user });
     } catch (err) {
-      set({ isLoading: false, error: err.response.data.message, user: null });
+      set({
+        isLoading: false,
+        error:
+          err?.response?.data?.message ||
+          "An unexpected error occurred during signup.",
+        user: null,
+      });
     }
   },
   logout: async () => {
-    set({ isLoading: false, error: null, user: null });
-    const response = await axios.post(
-      `${API_BASE_URL}/users/logout`,
-      {},
-      { withCredentials: true }
-    );
+    set({ isLoading: false, error: null, user: null, token: null });
+    try {
+      const response = await axios.post(
+        `${API_BASE_URL}/users/logout`,
+        {},
+        { withCredentials: true }
+      );
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
+    } catch (err) {
+      console.log(err);
+    }
   },
   getProducts: async () => {
     set({ isLoading: true, error: null });
