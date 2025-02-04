@@ -3,14 +3,22 @@ import "dotenv/config";
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
+import cookieParser from "cookie-parser";
+
 // import productRoutes from "./routes/productRoutes.js";
-import userRoutes from "./routes/userRoutes.js"; // Import user routes
+import userRoutes from "./routes/userRoutes.js";
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = 8000;
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5176", // Replace with your frontend URL
+    credentials: true,
+  })
+);
 app.use(express.json());
+app.use(cookieParser()); // Use cookie-parser
 
 mongoose
   .connect(process.env.MONGODB_URI, {
@@ -29,8 +37,8 @@ app.get("/", (req, res) => {
 });
 
 // app.use("/api/products", productRoutes);
-app.use("/api/users", userRoutes); // Mount user routes on /api/users
+app.use("/api/users", userRoutes);
 
-app.listen(PORT, () => {
+app.listen(8000, () => {
   console.log(`Server running on port ${PORT}`);
 });
