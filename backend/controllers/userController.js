@@ -1,9 +1,14 @@
+// backend/controllers/userController.js
 import User from "../models/userModel.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import speakeasy from "speakeasy";
+import qrcode from "qrcode";
 
 const generateToken = (res, id) => {
-  const token = jwt.sign({ id }, process.env.JWT_SECRET, {
+
+  const JWT_SECRET="hussain"
+  const token = jwt.sign({ id }, JWT_SECRET, {
     expiresIn: "1d",
   });
   res.cookie("token", token, {
@@ -34,6 +39,8 @@ const signupUser = async (req, res) => {
         id: savedUser._id,
         name: savedUser.name,
         email: savedUser.email,
+        role: savedUser.role,
+        profile: savedUser.profile,
       },
     });
   } catch (error) {
@@ -60,6 +67,8 @@ const signinUser = async (req, res) => {
         id: user._id,
         name: user.name,
         email: user.email,
+        role: user.role,
+        profile: user.profile,
       },
     });
   } catch (error) {
@@ -76,6 +85,7 @@ const logoutUser = (req, res) => {
   });
   res.status(200).json({ message: "User logged out successfully" });
 };
+
 //Get All Users
 const getAllUsers = async (req, res) => {
   try {
@@ -120,7 +130,93 @@ const deleteUser = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+const googleAuth = async (req, res) => {
+  // Handle Google authentication logic here
+  res.status(501).json({ message: "Google authentication not implemented" });
+};
 
+const facebookAuth = async (req, res) => {
+  // Handle Facebook authentication logic here
+  res.status(501).json({ message: "Facebook authentication not implemented" });
+};
+// Enable two-factor authentication
+const enableTwoFactorAuth = async (req, res) => {
+  const secret = speakeasy.generateSecret({ length: 20 });
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    user.twoFactorAuth.enabled = true;
+    user.twoFactorAuth.secret = secret.base32;
+    await user.save();
+
+    qrcode.toDataURL(secret.otpauth_url, (err, data_url) => {
+      if (err) {
+        console.error("Error generating QR code:", err);
+        return res.status(500).json({ message: "Failed to generate QR code" });
+      }
+      res.json({
+        message: "Two-factor authentication enabled",
+        secret: secret.base32,
+        qrCode: data_url,
+      });
+    });
+  } catch (error) {
+    console.error("Error enabling two-factor auth:", error);
+    res
+      .status(500)
+      .json({ message: "Failed to enable two-factor authentication" });
+  }
+};
+// Verify two-factor authentication token
+const verifyTwoFactorAuth = async (req, res) => {
+  const { token } = req.body;
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const verified = speakeasy.totp.verify({
+      secret: user.twoFactorAuth.secret,
+      encoding: "base32",
+      token: token,
+    });
+
+    if (verified) {
+      res.json({ message: "Two-factor authentication verified successfully" });
+    } else {
+      res.status(400).json({ message: "Two-factor authentication failed" });
+    }
+  } catch (error) {
+    console.error("Error verifying two-factor auth:", error);
+    res
+      .status(500)
+      .json({ message: "Failed to verify two-factor authentication" });
+  }
+};
+
+// Disable two-factor authentication
+const disableTwoFactorAuth = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    user.twoFactorAuth.enabled = false;
+    user.twoFactorAuth.secret = null;
+    await user.save();
+
+    res.json({ message: "Two-factor authentication disabled successfully" });
+  } catch (error) {
+    console.error("Error disabling two-factor auth:", error);
+    res
+      .status(500)
+      .json({ message: "Failed to disable two-factor authentication" });
+  }
+};
 export default {
   signupUser,
   signinUser,
@@ -128,4 +224,9 @@ export default {
   getAllUsers,
   editUser,
   deleteUser,
+  googleAuth,
+  facebookAuth,
+  enableTwoFactorAuth,
+  verifyTwoFactorAuth,
+  disableTwoFactorAuth,
 };

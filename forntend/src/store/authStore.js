@@ -7,8 +7,12 @@ const useAuthStore = create((set, get) => ({
   isLoading: false,
   error: null,
   user: null,
+  product: null, // Single product detail
+  products: [], // All Products
+  cart: [],
+  isAdmin: false, // Initial value
   setUser: (user) => set({ user }),
-  //Session Token management
+
   token: localStorage.getItem("token") || null,
   setToken: (token) => set({ token }),
   clearToken: () => set({ token: null }),
@@ -24,7 +28,12 @@ const useAuthStore = create((set, get) => ({
       );
       const { user } = response.data;
       localStorage.setItem("user", JSON.stringify(user));
-      set({ isLoading: false, error: null, user: user });
+      set({
+        isLoading: false,
+        error: null,
+        user: user,
+        isAdmin: user?.role === "admin",
+      });
     } catch (err) {
       set({
         isLoading: false,
@@ -45,7 +54,12 @@ const useAuthStore = create((set, get) => ({
       );
       const { user } = response.data;
       localStorage.setItem("user", JSON.stringify(user));
-      set({ isLoading: false, error: null, user: user });
+      set({
+        isLoading: false,
+        error: null,
+        user: user,
+        isAdmin: user?.role === "admin",
+      });
     } catch (err) {
       set({
         isLoading: false,
@@ -57,18 +71,20 @@ const useAuthStore = create((set, get) => ({
     }
   },
   logout: async () => {
-    set({ isLoading: false, error: null, user: null, token: null });
-    try {
-      const response = await axios.post(
-        `${API_BASE_URL}/users/logout`,
-        {},
-        { withCredentials: true }
-      );
-      localStorage.removeItem("user");
-      localStorage.removeItem("token");
-    } catch (err) {
-      console.log(err);
-    }
+    set({
+      isLoading: false,
+      error: null,
+      user: null,
+      token: null,
+      isAdmin: false,
+    });
+    const response = await axios.post(
+      `${API_BASE_URL}/users/logout`,
+      {},
+      { withCredentials: true }
+    );
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
   },
   getProducts: async () => {
     set({ isLoading: true, error: null });
@@ -89,6 +105,42 @@ const useAuthStore = create((set, get) => ({
     } catch (error) {
       set({ isLoading: false, error: error.response.data.message });
     }
+  },
+  // Cart Functionalities
+  addToCart: (product, quantity) => {
+    set((state) => {
+      const itemInCart = state.cart.find(
+        (item) => item.productId === product.id
+      );
+      if (itemInCart) {
+        const updatedCart = state.cart.map((item) => {
+          if (item.productId === product.id) {
+            return { ...item, quantity: item.quantity + quantity };
+          } else {
+            return item;
+          }
+        });
+        return { ...state, cart: updatedCart };
+      } else {
+        return {
+          ...state,
+          cart: [
+            ...state.cart,
+            { productId: product.id, quantity, price: product.price },
+          ],
+        };
+      }
+    });
+  },
+
+  removeFromCart: (productId) => {
+    set((state) => ({
+      ...state,
+      cart: state.cart.filter((item) => item.productId !== productId),
+    }));
+  },
+  clearCart: () => {
+    set((state) => ({ ...state, cart: [] }));
   },
 }));
 
