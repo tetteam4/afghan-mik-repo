@@ -1,6 +1,6 @@
 // frontend/src/components/AddToCart.jsx
 import React, { useState, useContext } from "react";
-import { useAuthStore } from "../store/authStore";
+import { useAuthStore } from "../../store/authStore";
 const AddToCart = ({ product }) => {
   const { addToCart, cart } = useAuthStore(); // Assuming you add these to the store
 

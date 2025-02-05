@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import HeroSection from "../components/HeroSection";
 import VideoHistory from "../components/VideoHistory";
 import { useAuthStore } from "../store/authStore";
-
+// import ProductDetail from './ProductDetails'
 const Home = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -145,7 +145,12 @@ const Home = () => {
       <div>
         <VideoHistory />
       </div>
-      <HeroSection />
+      <div>
+        <HeroSection />
+      </div>
+      <div>
+        {/* <ProductDetail /> */}
+      </div>
     </div>
   );
 };

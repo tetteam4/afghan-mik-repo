@@ -1,4 +1,3 @@
-// backend/controllers/userController.js
 import User from "../models/userModel.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
@@ -7,17 +6,10 @@ import qrcode from "qrcode";
 
 const JWT_SECRET = process.env.JWT_SECRET || "hussain"; // Use env variable for secret
 
-const generateToken = (res, id) => {
-  const token = jwt.sign({ id }, JWT_SECRET, {
+const generateToken = (id) => {
+  return jwt.sign({ id }, JWT_SECRET, {
     expiresIn: "1d",
   });
-  res.cookie("token", token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV !== "development", // Use secure cookies in production
-    sameSite: "strict", // Prevent CSRF attacks
-    maxAge: 24 * 60 * 60 * 1000, // 1 day
-  });
-  return token;
 };
 
 const userController = {
@@ -45,10 +37,11 @@ const userController = {
       }); // Use username here
       const savedUser = await newUser.save();
 
-      generateToken(res, savedUser._id);
+      const token = generateToken(savedUser._id); // Generate the token after succesful signup
 
       res.status(201).json({
         message: "User registered successfully",
+        token: token, //Send Token now
         user: {
           id: savedUser._id,
           username: savedUser.username,
@@ -76,10 +69,13 @@ const userController = {
       if (!isPasswordCorrect) {
         return res.status(400).json({ message: "Invalid credentials" });
       }
-      generateToken(res, user._id);
+
+      // Generate Token
+      const token = generateToken(user._id);
 
       res.status(200).json({
         message: "User logged in successfully",
+        token: token, // SEND THE TOKEN IN THE RESPONSE
         user: {
           id: user._id,
           username: user.username,
@@ -97,12 +93,6 @@ const userController = {
   },
 
   logoutUser: (req, res) => {
-    res.cookie("token", "", {
-      httpOnly: true,
-      expires: new Date(0), // Set to a past date to delete
-      secure: process.env.NODE_ENV !== "development",
-      sameSite: "strict",
-    });
     res.status(200).json({ message: "User logged out successfully" });
   },
 

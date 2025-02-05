@@ -6,8 +6,16 @@ const videoController = {
       if (!req.file) {
         return res.status(400).json({ message: "No video file uploaded" });
       }
+      console.log("The user object", req.user);
+
+      if (!req.user || !req.user._id) {
+        return res
+          .status(401)
+          .json({ message: "Unauthorized: User not authenticated" });
+      }
+      const userId = req.user._id;
       const newVideo = new Video({
-        userId: req.user.id,
+        userId: userId,
         title: req.body.title,
         description: req.body.description,
         videoUrl: req.file.path,

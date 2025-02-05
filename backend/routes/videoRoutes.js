@@ -10,7 +10,7 @@ router.post(
   protect,
   upload.single("video"),
   videoController.uploadVideo
-); // Added upload route
+);
 router.get("/", videoController.getAllVideos);
 router.get("/:id", videoController.getVideoById);
 router.put("/:id/like", protect, videoController.likeVideo);

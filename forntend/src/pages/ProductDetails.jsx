@@ -1,7 +1,7 @@
 // frontend/src/pages/ProductDetails.jsx
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import AddToCart from "../components/AddToCart";
+import AddToCart from "../components/AddToCard/AddToCart";
 import { useAuthStore } from "../store/authStore";
 
 const ProductDetails = () => {

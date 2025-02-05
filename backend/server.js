@@ -63,9 +63,8 @@ app.use("/api/users", userRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/wishlist", wishlistRoutes);
-app.use("/api/videos", videoRoutes); // NEW: Video routes
+app.use("/api/videos", videoRoutes);
 
-// Error handling middleware (MUST be the last middleware)
 app.use(errorHandler);
 
 app.listen(PORT, () => {

@@ -32,28 +32,29 @@ const VideoUpload = () => {
     formData.append("title", title);
     formData.append("description", description);
 
-    try {
-      const response = await axios.post("/api/videos/upload", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+  try {
+    const response = await axios.post("/api/videos/upload", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`, // Make absolutely sure this is present and correct
+      },
+    });
 
-      if (response.status === 200 || response.status === 201) {
-        console.log("Video uploaded successfully:", response.data);
-        setUploadSuccess(true);
-      } else {
-        console.error("Error uploading video:", response.status, response.data);
-        setUploadError("Video upload failed. Please try again.");
-      }
-    } catch (error) {
-      console.error("Error uploading video:", error);
-      setUploadError(
-        "Video upload failed. Please check the console for details."
-      );
-    } finally {
-      setUploading(false);
+    if (response.status === 200 || response.status === 201) {
+      console.log("Video uploaded successfully:", response.data);
+      setUploadSuccess(true);
+    } else {
+      console.error("Error uploading video:", response.status, response.data);
+      setUploadError("Video upload failed. Please try again.");
     }
+  } catch (error) {
+    console.error("Error uploading video:", error);
+    setUploadError(
+      "Video upload failed. Please check the console for details."
+    );
+  } finally {
+    setUploading(false);
+  }
   };
 
   return (

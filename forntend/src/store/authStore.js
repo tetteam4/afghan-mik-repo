@@ -4,19 +4,16 @@ import { useNavigate } from "react-router-dom";
 
 const API_BASE_URL = "http://localhost:8000/api";
 
-// Add the interceptor *outside* the useAuthStore definition,
-// so it's only added once when the module is loaded.
-
 const useAuthStore = create((set, get) => {
   return {
     isLoading: false,
     error: null,
-    user: JSON.parse(localStorage.getItem("user")) || null, // Initialize from local storage
+    user: JSON.parse(localStorage.getItem("userAuth")) || null, // Initialize from local storage
     product: null,
     products: [],
     cart: [],
     isAdmin:
-      JSON.parse(localStorage.getItem("user"))?.role === "admin" || false, // Initialize from local storage
+      JSON.parse(localStorage.getItem("userAuth"))?.role === "admin" || false, // Initialize from local storage
     setUser: (user) => set({ user }),
 
     token: localStorage.getItem("token") || null,
@@ -31,18 +28,16 @@ const useAuthStore = create((set, get) => {
           { email, password },
           { withCredentials: true }
         );
-        const { user } = response.data;
-        localStorage.setItem("user", JSON.stringify(user)); // Update local storage
-        localStorage.setItem("token", response?.data?.token);
-        axios.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${response?.data?.token}`; //Update headers
+        const { user, token } = response.data;
+        localStorage.setItem("userAuth", JSON.stringify(user)); // Update local storage
+        localStorage.setItem("token", token);
+        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`; //Update headers
 
         set({
           isLoading: false,
           error: null,
           user: user,
-          token: response?.data?.token,
+          token: token,
           isAdmin: user?.role === "admin",
         });
 
@@ -70,19 +65,17 @@ const useAuthStore = create((set, get) => {
           { username, email, password },
           { withCredentials: true }
         );
-        const { user } = response.data;
-        localStorage.setItem("user", JSON.stringify(user)); // Update local storage
-        localStorage.setItem("token", response?.data?.token);
-        axios.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${response?.data?.token}`; //Update headers
+        const { user, token } = response.data;
+        localStorage.setItem("userAuth", JSON.stringify(user)); // Update local storage
+        localStorage.setItem("token", token);
+        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`; //Update headers
 
         set({
           isLoading: false,
           error: null,
           user: user,
           isAdmin: user?.role === "admin",
-          token: response?.data?.token,
+          token: token,
         });
         // Redirect based on role
         if (user?.role === "admin") {
@@ -108,12 +101,7 @@ const useAuthStore = create((set, get) => {
         token: null,
         isAdmin: false,
       });
-      const response = await axios.post(
-        `${API_BASE_URL}/users/logout`,
-        {},
-        { withCredentials: true }
-      );
-      localStorage.removeItem("user"); // Update local storage
+      localStorage.removeItem("userAuth"); // Update local storage
       localStorage.removeItem("token");
       axios.defaults.headers.common["Authorization"] = null;
     },
