@@ -2,16 +2,17 @@ import "dotenv/config";
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
+
 import cookieParser from "cookie-parser";
 import rateLimit from "express-rate-limit";
 import xss from "xss-clean";
 import helmet from "helmet";
+
 import userRoutes from "./routes/userRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import wishlistRoutes from "./routes/wishlistRoutes.js";
 import videoRoutes from "./routes/videoRoutes.js"; // NEW
-import { protect } from "./middleware/authMiddleware.js"; // NEW (if needed for all routes)
 import errorHandler from "./middleware/errorMiddleware.js";
 
 const limiter = rateLimit({

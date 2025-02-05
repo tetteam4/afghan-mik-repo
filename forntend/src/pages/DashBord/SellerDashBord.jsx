@@ -2,6 +2,7 @@
 import React from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuthStore } from "../../store/authStore";
+import VideoUpload from "../../components/VideoUpload"; // Import VideoUpload
 
 function SellerDashBord() {
   const { user } = useAuthStore();
@@ -11,12 +12,16 @@ function SellerDashBord() {
     navigate("/");
     return null;
   }
+
   return (
     <div>
       <h2>Seller Dashboard</h2>
       {/* Add links to manage products, view orders, etc. */}
       <Link to="/seller-dash/manage-products">Manage Products</Link>
       <Link to="/seller-dash/add-products">Add Products</Link>
+
+      {/* Add VideoUpload Component */}
+      <VideoUpload />
     </div>
   );
 }

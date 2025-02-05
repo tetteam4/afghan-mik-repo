@@ -1,6 +1,11 @@
 // frontend/src/App.jsx
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import { useAuthStore } from "./store/authStore";
 
 // Layouts
@@ -21,7 +26,7 @@ import ManageUsers from "./pages/Admin/ManageUsers";
 import ManageProducts from "./pages/Admin/ManageProducts";
 import Order from "./pages/Order";
 import SellerDashboard from "./pages/DashBord/SellerDashBord";
-
+import { Upload } from "lucide-react";
 
 const App = () => {
   const { user, isAdmin } = useAuthStore();
@@ -36,30 +41,35 @@ const App = () => {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
 
-        {/* User Routes */}
-        {user && ( // Only show user routes if logged in
-          <Route path="/user-dash" element={<UserLayout />}>
-            <Route path="/user-dash/profile" element={<UserProfile />} />
-          </Route>
-        )}
-        <Route path="/order" element={<Order />} />
-        {/* Seller Route */}
-        {user && user.role === "seller" && (
-          <Route path="/seller-dash" element={<SellerDashboard />}>
-            <Route
-              path="/seller-dash/manage-products"
-              element={<ManageProducts />}
-            />
-          </Route>
-        )}
+        {user ? (
+          <>
+            <Route path="/user-dash" element={<UserLayout />}>
+              <Route path="/user-dash/profile" element={<UserProfile />} />
+            </Route>
 
-        {/* Admin Routes */}
-        {isAdmin && ( // Only show admin routes if the user is an admin
-          <Route path="/admin" element={<AdminLayout />}>
-            <Route path="/admin/dashboard" element={<AdminDashboard />} />
-            <Route path="/admin/manage-users" element={<ManageUsers />} />
-            <Route path="/admin/manage-products" element={<ManageProducts />} />
-          </Route>
+            <Route path="/order" element={<Order />} />
+            {user.role === "seller" && (
+              <Route path="/seller-dash" element={<SellerDashboard />}>
+                <Route
+                  path="/seller-dash/manage-products"
+                  element={<ManageProducts />}
+                />
+              </Route>
+            )}
+            {isAdmin ? (
+              <Route path="/admin" element={<AdminLayout />}>
+                <Route path="/admin/dashboard" element={<AdminDashboard />} />
+                <Route path="/admin/manage-users" element={<ManageUsers />} />
+                <Route
+                  path="/admin/manage-products"
+                  element={<ManageProducts />}
+                />
+              </Route>
+            ) : null}
+          </>
+        ) : (
+          // If no user is logged in, route back to signin
+          <Route path="*" element={<Navigate to="/signin" replace />} />
         )}
       </Routes>
     </Router>

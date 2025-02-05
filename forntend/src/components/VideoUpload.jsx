@@ -1,6 +1,7 @@
 // frontend/src/components/VideoUpload.jsx
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useAuthStore } from "../store/authStore"; // Import the store
 
 const VideoUpload = () => {
   const [video, setVideo] = useState(null);
@@ -9,9 +10,9 @@ const VideoUpload = () => {
   const [uploading, setUploading] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);
   const [uploadError, setUploadError] = useState(null);
+  const { token } = useAuthStore(); // Access the token from the store
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
     if (token) {
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     }

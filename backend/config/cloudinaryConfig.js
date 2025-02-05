@@ -1,5 +1,5 @@
 // backend/config/cloudinaryConfig.js (or in server.js)
-import cloudinary from 'cloudinary'.v2;
+import { v2 as cloudinary } from "cloudinary";
 import dotenv from 'dotenv';
 
 dotenv.config();

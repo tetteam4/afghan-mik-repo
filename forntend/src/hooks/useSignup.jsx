@@ -7,14 +7,22 @@ const useSignup = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { signup, isLoading, error } = useAuthStore();
+  const { signup, isLoading, error, user } = useAuthStore(); // Get user from store
   const navigate = useNavigate();
 
   const handleSignup = async (e) => {
     e.preventDefault();
     try {
       await signup(username, email, password);
-      navigate("/user-dash/profile"); // Corrected navigation
+
+      // Navigate based on role *after* signup completes
+      if (user?.role === "admin") {
+        navigate("/admin/dashboard");
+      } else if (user?.role === "seller") {
+        navigate("/seller-dash");
+      } else {
+        navigate("/user-dash/profile");
+      }
     } catch (err) {
       console.error("Signup failed:", err);
     }

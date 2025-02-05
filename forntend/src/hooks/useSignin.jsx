@@ -6,16 +6,23 @@ import { useNavigate } from "react-router-dom";
 const useSignin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { login, isLoading, error } = useAuthStore();
+  const { login, isLoading, error, user } = useAuthStore(); // Get user from store
   const navigate = useNavigate();
 
   const handleSignin = async (e) => {
     e.preventDefault();
     try {
       await login(email, password);
-      navigate("/user-dash/profile");
+
+      // Navigate based on role *after* login completes
+      if (user?.role === "admin") {
+        navigate("/admin/dashboard");
+      } else if (user?.role === "seller") {
+        navigate("/seller-dash");
+      } else {
+        navigate("/user-dash/profile");
+      }
     } catch (err) {
-      // Error is already handled by the store, but you might want to add specific error handling here.
       console.error("Signin failed:", err);
     }
   };
