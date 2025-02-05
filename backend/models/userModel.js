@@ -17,7 +17,11 @@ const userSchema = new mongoose.Schema({
     lastName: { type: String, default: "" },
     phone: { type: String, default: "" },
     address: { type: String, default: "" },
-    avatar: { type: String, default: "" }, // URL to avatar image
+    avatar: {
+      type: String,
+      default:
+        "https://fr.freepik.com/vecteurs-libre/illustration-du-jeune-prince-vecteur_354177187.htm#fromView=keyword&page=1&position=3&query=Avatar+Profil",
+    }, // URL to avatar image
     dateOfBirth: { type: Date },
   },
 
