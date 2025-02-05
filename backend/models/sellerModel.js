@@ -1,7 +1,12 @@
 import mongoose from "mongoose";
 
 const sellerSchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+    index: true,
+  }, // Index for finding sellers by user ID
   storeName: { type: String, required: true },
   businessAddress: String,
   taxId: String,

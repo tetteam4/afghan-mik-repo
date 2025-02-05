@@ -20,6 +20,8 @@ import UserProfile from "./pages/Profile/UserProfile";
 import AdminDashboard from "./pages/DashBord/AdminDashBord.jsx";
 import ManageUsers from "./pages/Admin/ManageUsers";
 import ManageProducts from "./pages/Admin/ManageProducts";
+import Order from "./pages/Order";
+import SellerDashboard from "./pages/DashBord/SellerDashBord";
 
 const App = () => {
   return (
@@ -38,12 +40,21 @@ const App = () => {
         <Route path="/user-dash" element={<UserLayout />}>
           <Route path="/user-dash/profile" element={<UserProfile />} />
         </Route>
+        <Route path="/order" element={<Order />} />
+        <Route path="/seller-dash" element={<SellerDashboard />} />
 
         {/* Admin Routes with AdminLayout */}
         <Route path="/admin" element={<AdminLayout />}>
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/manage-users" element={<ManageUsers />} />
           <Route path="/admin/manage-products" element={<ManageProducts />} />
+        </Route>
+        {/* seller route */}
+        <Route path="/seller-dash" element={<SellerDashboard />}>
+          <Route
+            path="/seller-dash/manage-products"
+            element={<ManageProducts />}
+          />
         </Route>
       </Routes>
     </Router>

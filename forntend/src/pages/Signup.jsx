@@ -2,53 +2,45 @@
 import { motion } from "framer-motion";
 import Input from "../components/Input";
 import { Loader, Lock, Mail, User } from "lucide-react";
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import PasswordStrengthMeter from "../components/PasswordStrengthMeter";
-import { useAuthStore } from "../store/authStore.js";
+import useSignup from "../hooks/useSignup";
 
 const SignUpPage = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const navigate = useNavigate();
-  const { signup, error, isLoading } = useAuthStore();
-
-  const handleSignUp = async (e) => {
-    e.preventDefault();
-    try {
-      await signup(email, password, name);
-      navigate("/");
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const {
+    username,
+    setUsername,
+    email,
+    setEmail,
+    password,
+    setPassword,
+    handleSignup,
+    isLoading,
+    error,
+  } = useSignup();
 
   return (
     <div
       className="w-full h-screen flex justify-center items-center"
       dir="rtl"
       style={{
-        backgroundImage: 'url("/on/1.jpg")', // Background image
-        backgroundSize: "cover", // Ensure the image covers the entire screen
-        backgroundPosition: "center", // Center the image
+        backgroundImage: 'url("/on/1.jpg")',
+        backgroundSize: "cover",
+        backgroundPosition: "center",
       }}
     >
-      {/* Overlay to darken the background image */}
       <div
         className="absolute inset-0 bg-black bg-opacity-50"
         style={{ zIndex: 1 }}
       ></div>
 
-      {/* Signup Form */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="max-w-md w-full bg-gray-900 bg-opacity-70 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden relative z-10 border border-gray-700" // Added border for a sleek look
+        className="max-w-md w-full bg-gray-900 bg-opacity-70 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden relative z-10 border border-gray-700"
       >
         <div className="p-8">
-          {/* Header with Gradient Text */}
           <motion.h2
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -58,9 +50,7 @@ const SignUpPage = () => {
             ایجاد حساب کاربری
           </motion.h2>
 
-          {/* Form */}
-          <form onSubmit={handleSignUp}>
-            {/* Name Input */}
+          <form onSubmit={handleSignup}>
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -69,13 +59,12 @@ const SignUpPage = () => {
               <Input
                 icon={User}
                 type="text"
-                placeholder="نام و نام خانوادگی"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                placeholder="نام کاربری"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
               />
             </motion.div>
 
-            {/* Email Input */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -90,7 +79,6 @@ const SignUpPage = () => {
               />
             </motion.div>
 
-            {/* Password Input */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -105,7 +93,6 @@ const SignUpPage = () => {
               />
             </motion.div>
 
-            {/* Error Message */}
             {error && (
               <motion.p
                 initial={{ opacity: 0 }}
@@ -117,7 +104,6 @@ const SignUpPage = () => {
               </motion.p>
             )}
 
-            {/* Password Strength Meter */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -126,7 +112,6 @@ const SignUpPage = () => {
               <PasswordStrengthMeter password={password} />
             </motion.div>
 
-            {/* Submit Button */}
             <motion.button
               className="mt-5 w-full py-3 px-4 bg-gradient-to-r from-cyan-500 via-blue-600 to-purple-700 text-white font-bold rounded-lg shadow-lg hover:from-cyan-600 hover:via-blue-700 hover:to-purple-800 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition duration-200"
               whileHover={{ scale: 1.05 }}
@@ -143,7 +128,6 @@ const SignUpPage = () => {
           </form>
         </div>
 
-        {/* Footer with Link to Login */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

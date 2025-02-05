@@ -1,49 +1,43 @@
 // frontend/src/pages/Signin.jsx
-import { useState } from "react";
 import { motion } from "framer-motion";
 import { Mail, Lock, Loader } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Input from "../components/Input";
-import { useAuthStore } from "../store/authStore";
+import useSignin from "../hooks/useSignin";
 
 const LoginPage = () => {
-  const navigate=useNavigate()
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const { login, isLoading, error } = useAuthStore();
-
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    await login(email, password);
-    await navigate("/")
-    
-  };
+  const {
+    email,
+    setEmail,
+    password,
+    setPassword,
+    handleSignin,
+    isLoading,
+    error,
+  } = useSignin();
 
   return (
     <div
       className="w-full h-screen flex justify-center items-center"
       dir="rtl"
       style={{
-        backgroundImage: 'url("/on/1.jpg")', // Background image
-        backgroundSize: "cover", // Ensure the image covers the entire screen
-        backgroundPosition: "center", // Center the image
+        backgroundImage: 'url("/on/1.jpg")',
+        backgroundSize: "cover",
+        backgroundPosition: "center",
       }}
     >
-      {/* Overlay to darken the background image */}
       <div
         className="absolute inset-0 bg-black bg-opacity-50"
         style={{ zIndex: 1 }}
       ></div>
 
-      {/* Login Form */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="max-w-md w-full bg-gray-900 bg-opacity-70 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden relative z-10 border border-gray-700" // Added border for a sleek look
+        className="max-w-md w-full bg-gray-900 bg-opacity-70 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden relative z-10 border border-gray-700"
       >
         <div className="p-8">
-          {/* Header with Gradient Text */}
           <motion.h2
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -53,9 +47,7 @@ const LoginPage = () => {
             خوش آمدید
           </motion.h2>
 
-          {/* Form */}
-          <form onSubmit={handleLogin}>
-            {/* Email Input */}
+          <form onSubmit={handleSignin}>
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -70,7 +62,6 @@ const LoginPage = () => {
               />
             </motion.div>
 
-            {/* Password Input */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -85,7 +76,6 @@ const LoginPage = () => {
               />
             </motion.div>
 
-            {/* Forgot Password Link */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -100,7 +90,6 @@ const LoginPage = () => {
               </Link>
             </motion.div>
 
-            {/* Error Message */}
             {error && (
               <motion.p
                 initial={{ opacity: 0 }}
@@ -112,7 +101,6 @@ const LoginPage = () => {
               </motion.p>
             )}
 
-            {/* Submit Button */}
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -129,7 +117,6 @@ const LoginPage = () => {
           </form>
         </div>
 
-        {/* Footer with Link to Signup */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

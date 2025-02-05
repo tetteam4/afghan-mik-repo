@@ -1,4 +1,3 @@
-// frontend/src/store/authStore.js
 import { create } from "zustand";
 import axios from "axios";
 const API_BASE_URL = "http://localhost:8000/api"; // Replace with your actual backend URL
@@ -44,12 +43,12 @@ const useAuthStore = create((set, get) => ({
       });
     }
   },
-  signup: async (name, email, password) => {
+  signup: async (username, email, password) => {
     set({ isLoading: true, error: null });
     try {
       const response = await axios.post(
         `${API_BASE_URL}/users/signup`,
-        { name, email, password },
+        { username, email, password },
         { withCredentials: true }
       );
       const { user } = response.data;
@@ -86,10 +85,12 @@ const useAuthStore = create((set, get) => ({
     localStorage.removeItem("user");
     localStorage.removeItem("token");
   },
-  getProducts: async () => {
+  getProducts: async (searchQuery) => {
     set({ isLoading: true, error: null });
     try {
-      const response = await axios.get(`${API_BASE_URL}/products`);
+      const response = await axios.get(
+        `${API_BASE_URL}/products?${searchQuery}`
+      );
       set({ products: response.data, isLoading: false, error: null });
       return response.data;
     } catch (error) {
