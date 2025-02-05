@@ -13,7 +13,7 @@ const useSignin = () => {
     e.preventDefault();
     try {
       await login(email, password);
-      navigate("/");
+      navigate("/user-dash/profile");
     } catch (err) {
       // Error is already handled by the store, but you might want to add specific error handling here.
       console.error("Signin failed:", err);

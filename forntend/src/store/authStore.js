@@ -1,22 +1,53 @@
 import { create } from "zustand";
 import axios from "axios";
-const API_BASE_URL = "http://localhost:8000/api"; // Replace with your actual backend URL
+import { useNavigate } from "react-router-dom";
+
+const API_BASE_URL = "http://localhost:8000/api";
+
+// Add the interceptor *outside* the useAuthStore definition,
+// so it's only added once when the module is loaded.
+axios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    console.log("interceptor catch some thing");
+    // Handle common errors (e.g., 401 Unauthorized, 500 Server Error)
+    if (error.response?.status === 401) {
+      // Redirect to login, clear local storage, etc.
+      console.error("Unauthorized:", error);
+      // You'll need a way to access the navigate function here.  One way is to create a separate function
+      // that you can call from the interceptor, which has access to `useNavigate` through a component.
+      //Example
+      const logoutAction = () => {
+        localStorage.removeItem("user"); // remove user from local storage to log user out
+        window.location.href = "/signin"; // navigate to login page
+      };
+      logoutAction();
+      // navigate("/signin"); // This won't work directly in the interceptor
+    } else if (error.response?.status >= 500) {
+      console.error("Server Error:", error);
+      // Display a generic error message to the user
+    } else {
+      console.error("API Error:", error);
+      // Handle other errors
+    }
+    return Promise.reject(error); // Re-throw the error so the component can handle it if needed
+  }
+);
 
 const useAuthStore = create((set, get) => ({
   isLoading: false,
   error: null,
-  user: null,
-  product: null, // Single product detail
-  products: [], // All Products
+  user: JSON.parse(localStorage.getItem("user")) || null, // Initialize from local storage
+  product: null,
+  products: [],
   cart: [],
-  isAdmin: false, // Initial value
+  isAdmin: JSON.parse(localStorage.getItem("user"))?.role === "admin" || false, // Initialize from local storage
   setUser: (user) => set({ user }),
 
   token: localStorage.getItem("token") || null,
   setToken: (token) => set({ token }),
   clearToken: () => set({ token: null }),
 
-  // Authentication Functionalities
   login: async (email, password) => {
     set({ isLoading: true, error: null });
     try {
@@ -26,7 +57,7 @@ const useAuthStore = create((set, get) => ({
         { withCredentials: true }
       );
       const { user } = response.data;
-      localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("user", JSON.stringify(user)); // Update local storage
       set({
         isLoading: false,
         error: null,
@@ -52,7 +83,7 @@ const useAuthStore = create((set, get) => ({
         { withCredentials: true }
       );
       const { user } = response.data;
-      localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("user", JSON.stringify(user)); // Update local storage
       set({
         isLoading: false,
         error: null,
@@ -82,7 +113,7 @@ const useAuthStore = create((set, get) => ({
       {},
       { withCredentials: true }
     );
-    localStorage.removeItem("user");
+    localStorage.removeItem("user"); // Update local storage
     localStorage.removeItem("token");
   },
   getProducts: async (searchQuery) => {

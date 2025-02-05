@@ -1,4 +1,3 @@
-// frontend/src/components/Navbar/Header.jsx
 import React, { useState, useContext, useRef, useEffect } from "react";
 import { AppContext } from "../../context/AppContext";
 import CitySelector from "../CitySelector";
@@ -15,7 +14,7 @@ const Header = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const navigate = useNavigate();
-  const { logout, user } = useAuthStore();
+  const { logout, user, isAdmin } = useAuthStore();
 
   const handleSearchClick = () => {
     setIsSearchOpen(true);
@@ -131,7 +130,7 @@ const Header = () => {
               onClick={toggleProfileOptions}
               className="cursor-pointer text-gray-800 hover:text-gray-600"
             >
-              {user ? user.name : "پروفایل"}
+              {user ? user.username : "پروفایل"}
             </div>
             {showProfileOptions && (
               <ProfileDropdown
