@@ -11,6 +11,11 @@ import {
   FaUserPlus,
   FaUserCheck,
 } from "react-icons/fa";
+import { SlUserFollow } from "react-icons/sl";
+import { FaRegHeart } from "react-icons/fa";
+import { FaRegComment } from "react-icons/fa6";
+import { SlUserFollowing } from "react-icons/sl";
+
 import { Link } from "react-router-dom";
 
 const VideoHistory = () => {
@@ -128,8 +133,6 @@ const VideoHistory = () => {
 const StoryViewer = ({
   story,
   onClose,
-  onPauseToggle,
-  isPaused,
   onLike,
   onCommentSubmit,
   goToPreviousStory,
@@ -175,6 +178,7 @@ const StoryViewer = ({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+  
 
   return (
     <div className="fixed top-0 left-0 w-full h-screen bg-black bg-opacity-80 flex justify-center items-center z-50">
@@ -222,22 +226,26 @@ const StoryViewer = ({
         {/* Action Buttons (Outside Video, Left Side) */}
         <div className="absolute bottom-4 left-14 flex mb-10  flex-col space-y-4">
           <button
-            className="ml-auto text-sm text-blue-500 hover:text-blue-700 "
+            className="ml-auto text-sm  text-blue-500 hover:text-blue-700 "
             onClick={handleFollow}
           >
-            {isFollowing ? <FaUserCheck /> : <FaUserPlus />}
+            {isFollowing ? (
+              <SlUserFollow className="w-8 h-8" />
+            ) : (
+              <SlUserFollowing className="w-8 h-8" />
+            )}
           </button>
           <button
             className="text-white hover:text-red-500"
             onClick={() => onLike(story._id)}
           >
-            <FaHeart className="w-6 h-6" />
+            <FaRegHeart className="w-8 h-8" />
           </button>
           <button
             className="text-white hover:text-blue-500"
             onClick={() => setShowCommentModal(true)}
           >
-            <FaComment className="w-6 h-6" />
+            <FaRegComment className="w-8 h-8" />
           </button>
           <button
             className="text-white hover:text-green-500"
