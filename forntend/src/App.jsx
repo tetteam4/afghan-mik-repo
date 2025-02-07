@@ -27,6 +27,7 @@ import ManageProducts from "./pages/Admin/ManageProducts";
 import Order from "./pages/Order";
 import SellerDashboard from "./pages/DashBord/SellerDashBord";
 import { Upload } from "lucide-react";
+import NotFountPages from "./pages/NotFountPages.jsx";
 
 const App = () => {
   const { user, isAdmin } = useAuthStore();
@@ -69,7 +70,7 @@ const App = () => {
           </>
         ) : (
           // If no user is logged in, route back to signin
-          <Route path="*" element={<Navigate to="/signin" replace />} />
+          <Route path="*" element={<NotFountPages  />} />
         )}
       </Routes>
     </Router>
